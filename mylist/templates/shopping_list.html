@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einkaufsliste</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="../assets/css/shopping_list.css" type="text/css">
+
+    <style>
+        body {
+            font-family: "Open Sans", sans-serif;
+            background-color: rgba(0, 0, 0, 0.05);
+            margin: 0;
+        }
+
+        header {
+            background-color: rgb(123, 160, 49);
+            display: flex;
+            padding-left: 20px;
+            box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            height: 48px;
+            width: 48px;
+            border-radius: 50%;
+            box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+            background-color: blue;
+            border: unset;
+            font-size: 32px;
+            color: white;
+            position: absolute;
+            right: 16px;
+            bottom: 16px;
+        }
+
+        .list-item {
+            background-color: white;
+            height: 60px;
+            box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+            padding-left: 20px;
+            display: flex;
+            align-items: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Einkaufsliste</h1>
+    </header>
+
+        {% for row in all_items %}
+        <div class="list-item">
+            <input type="checkbox"> {{row.name}}
+        </div>
+        {% endfor %}
+
+        <button onclick="addItem()">
+            +
+        </button>
+
+        <script>
+            function addItem() {
+                let itemName = prompt('Neues Element hinzufügen');
+                let token = '{{ csrf_token }}';
+                let formData = new FormData();
+                formData.append('itemName', itemName);
+                formData.append('csrfmiddlewaretoken', token);
+
+                fetch('/mylist/', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                window.location.reload();
+            }
+        </script>
+</body>
+</html>
